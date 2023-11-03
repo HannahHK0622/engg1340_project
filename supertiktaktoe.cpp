@@ -11,15 +11,16 @@ private:
 
 public:
     void init(int size){
-        this -> size = size;
-        int* board = new int[size * size];
+        this->size = size;
+        this->board = new int[size * size];
     }
 
     void setWinner(int* board){
         //sets the winner
     }
 
-    void setPlay(int row, int col){
+    void playsMove(int row, int col, int player){
+        int move = convertMove(row, col, this->size);
         //Plays the row, col.
         //Needs conversion of {int row, int col} into int.
     }
@@ -28,25 +29,38 @@ public:
         return this->winner;
     }
 
+    int getSize(){
+        return this->size;
+    }
+
+    int convertMove(int row, int col, int size){
+        int convertedMove;
+        //Some logic here...
+        return convertedMove;
+     }
 };
+
 class Game: public subGame{
+//Represents the whole game of games.
+//Since Game inherits subGame, it should have access to its methods. Like:
+//Game.setWinner() should set the winner of the whole game.
 private: 
     int size;
     subGame* subgames;
     int winner;
 
 public: 
-    void init(int size, int subGameSize){
-        this -> size = size;
-        subgames = new subGame[subGameSize * subGameSize];
+    void init(int size){
+        this->size = size;
+        this->subgames = new subGame[size * size];
         for(int i = 0; i < size*size; i++){
-            subgames[i].init(subGameSize);
+            subgames[i].init(size);
         }
     }
 
-    int selectBoard(int* lastPlay){
-        //select board to play in
-        //Depends on lastPlay which should be (int row, int col)
+    void playsMove(int row, int col, int player, int* lastPlay){
+        int board = convertMove(lastPlay[0], lastPlay[1], this->size);
+        subgames[board].playsMove(row, col, player); 
     }
 };
 
@@ -58,18 +72,20 @@ void declareWinner(string winner){
     cout << "The player is " << winner << endl;
 }
 
-
-int main(){
+void init(){
     cout << "Please enter the names of each player..." << endl;
     string player1, player2;
     string players[] = {player1, player2};
-    int innerSize, outerSize;
+    int size;
     cin >> player1 >> player2;
-    cout << "Please enter the dimensions of a subgame." << endl;
-    cin >> innerSize;
-    cout << "Please enter the dimensions of the whole game - for example, if you want 4x4 grid of subgames, enter 4." << endl;
-    cin >> outerSize;
+    cout << "Please enter the size of the game and the subgame. Note that the game and subgame must be of the same size." << endl;
+    cin >> size;
     Game game;
-    game.init(innerSize, outerSize);
+    game.init(size);
+}
+
+int main(){
+    init();
+
     return 0;
 }
