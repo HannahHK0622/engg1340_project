@@ -3,10 +3,11 @@
 #include <string>
 
 using namespace std;
+
 class subGame{
 private:
     int size;
-    int* board;
+    int* board; 
     int winner;
 
 public:
@@ -32,18 +33,10 @@ public:
     int getSize(){
         return this->size;
     }
-
-    int convertMove(int row, int col, int size){
-        int convertedMove;
-        //Some logic here...
-        return convertedMove;
-     }
 };
 
-class Game: public subGame{
-//Represents the whole game of games.
-//Since Game inherits subGame, it should have access to its methods. Like:
-//Game.setWinner() should set the winner of the whole game.
+class Game{
+
 private: 
     int size;
     subGame* subgames;
@@ -61,8 +54,15 @@ public:
     void playsMove(int row, int col, int player, int* lastPlay){
         int board = convertMove(lastPlay[0], lastPlay[1], this->size);
         subgames[board].playsMove(row, col, player); 
-    }
+    }           
 };
+
+
+int convertMove(int row, int col, int size){
+    int convertedMove;
+    //Some logic here...
+    return convertedMove;
+    }
 
 void format(Game game){
     //Formats the thing, somehow.
@@ -89,3 +89,10 @@ int main(){
 
     return 0;
 }
+
+/*
+X | O | X || O | O | X 
+----------||----------
+
+
+*/
