@@ -23,7 +23,7 @@ public:
     void playsMove(int row, int col, int player){
         int move = convertMove(row, col, this->size);
         //Plays the row, col.
-        //Needs conversion of {int row, int col} into int.
+        //ConvertMove to be implemented by Hannah
     }
 
     int getWinner(){
@@ -71,7 +71,8 @@ public:
     }
 
     void playsMove(int row, int col, int player, int board){
-        
+        subGame** subgamesptr = this->subgamesPtr;
+        (*subgamesptr)[board].playsMove(row, col, player);
     }
     
     void setOverallWinner(subGame** subgamePtr){
@@ -89,11 +90,11 @@ public:
 
     void rawDump(){
         cout << "You are using a debug feature... Just so you know" << endl;
-        subGame** subgames = this->subgamesPtr;
+        subGame** subgamesptr = this->subgamesPtr;
         size_t size = this->size;
         for(int board = 0; board < size; board++){
             for(int elem = 0; elem < size; elem++){
-                cout << (*subgames)[board].getBoard()[elem];
+                cout << (*subgamesptr)[board].getBoard()[elem];
             }
             cout << endl;
         }
@@ -101,15 +102,15 @@ public:
     }
 
     void formattedOutput(){
-        subGame** subgames = this->subgamesPtr;
+        subGame** subgamesptr = this->subgamesPtr;
         size_t size = this->size;
     }
 
     void destruct(){
-        subGame** subgames = this->subgamesPtr;
+        subGame** subgamesptr = this->subgamesPtr;
         size_t size = this->size;
         for(int board = 0; board < size; board++){
-            (*subgames)[board].destruct();
+            (*subgamesptr)[board].destruct();
         }
         delete[] subgamesPtr;
         delete[] playable;
@@ -124,14 +125,18 @@ public:
         return this->winner;
     }
 
+    bool* getPlayable(){
+        return this->playable;
+    }
+
     void update(){
-        subGame** subgames = this->subgamesPtr;
+        subGame** subgamesptr = this->subgamesPtr;
         size_t size = this->size;
         for(int board = 0; board < size*size; board++){
-            this->playable[board] = (*subgames)[board].getPlayable();
-            this->subWinners[board]=(*subgames)[board].getWinner();
+            this->playable[board] = (*subgamesptr)[board].getPlayable();
+            this->subWinners[board] = (*subgamesptr)[board].getWinner();
         }
-        this->setOverallWinner(subgames); 
+        this->setOverallWinner(subgamesptr); 
     }
     //Hannah's work
 };
@@ -167,14 +172,43 @@ int* getDefaultLastPlay(){
     return default;
 }
 
+int* takeMove(bool freeBoardChoice){
+    int row, col;
+    if(freeBoardChoice){
+        int boardRow, boardCol;
+        cout << "You may choose which board to play this time." << endl;
+        cin >> boardRow >> boardCol;
+        cout << endl;
+        cout << "Input the row, then the column that you'd like to play in, separated by space." << endl;
+        cin >> row >> col;
+        int returnVal[] = {row, col, boardRow, boardCol};
+        return returnVal;
+    } else {
+        cout << "Input the row, then the column that you'd like to play in, separated by space." << endl;
+        cin >> row >> col;
+        int returnVal[] = {row, col};
+        return returnVal;
+    }
+}
+
+bool checkInput(int* input, bool freeBoardChoice){
+    bool isValid;
+    //Logic here to validate input
+
+    return isValid;
+}
+
 int main(){
+    //Set false for submission
     const bool debugging = true;
 
+    //initialisation
     int* lastPlay = getDefaultLastPlay();
     string player1, player2;
     string players[] = {player1, player2};
     char playerToken[] = {'X', 'O'};
     bool player = 0;
+    bool freeBoardChoice;
     size_t size;
     cin >> player1 >> player2;
     cout << "Please enter the size of the game and the subgame. Note that the game and subgame must be of the same size." << endl;
@@ -189,13 +223,19 @@ int main(){
 
     //Game logic begins here
     while(true){
+        game.update();
         int board = chooseBoard(lastPlay, game.getSize());
+        freeBoardChoice = board == -1;
+        int* input = takeMove(freeBoardChoice);
+        bool inputValidity = checkInput(input, freeBoardChoice);
 
 
         if(game.getGameOver()){
             break;
         }
     }
+
+    //game over block   
     declareWinner(players[game.getWinner()]);
     game.destruct();
     return 0;
