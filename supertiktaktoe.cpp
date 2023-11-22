@@ -66,6 +66,7 @@ public:
         subGame* newSubgames = new subGame[size * size];
         this->playable = new bool[size*size];
         this->subgamesPtr = &newSubgames;
+        this->winner = -1;
         for(int i = 0; i < size*size; i++){
             (*subgamesPtr)[i].init(size);
         }
@@ -76,7 +77,17 @@ public:
         (*subgamesptr)[board].playsMove(row, col, player);
     }
     
-    void setOverallWinner(subGame** subgamePtr){
+    void setOverallWinner(){
+        subGame** subgamesPtr = this->subgamesPtr;
+        size_t size = this->size;
+        int* subWinners = this->subWinners;
+        int winner = this->winner;
+        /*
+        Win conditions:
+        - Someone wins an entire row (subgames[const][var] is all equal for some const and all var < size)
+        - Someone wins entire column
+        - Someone wins diagonal
+        */
 
 
     }
@@ -137,7 +148,7 @@ public:
             this->playable[board] = (*subgamesptr)[board].getPlayable();
             this->subWinners[board] = (*subgamesptr)[board].getWinner();
         }
-        this->setOverallWinner(subgamesptr); 
+        this->setOverallWinner(); 
     }
     //Hannah's work
 };
@@ -182,8 +193,6 @@ int main(){
         freeBoardChoice = board == -1;
         int* input = takeMove(freeBoardChoice);
         bool inputValidity = checkInput(input, freeBoardChoice);
-
-
         if(game.getGameOver()){
             break;
         }
