@@ -18,6 +18,7 @@ int convertMove(int row, int col, int size){
     //Jintao's work
     }
 
+
 int chooseBoard(int lastRow, int lastCol, size_t size, Game game){
     int board;
     //a bunch of logic
