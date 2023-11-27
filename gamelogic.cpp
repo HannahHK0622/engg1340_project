@@ -25,6 +25,16 @@ int chooseBoard(int lastRow, int lastCol, size_t size, Game game){
     //accoring to lastRow, lastCol, choose a board
     //Also check if it's playable
     //If the board is unplayable, return -1
+    board = lastRow*size + lastCol;
+    bool is_playable = (game->playable)[board];
+
+    if(is_playable == true){
+        board = board;
+    }
+    else{
+        board = -1;
+    }
+
     
     return board;
 }
@@ -58,7 +68,7 @@ int* takeMove(bool freeBoardChoice){
 bool checkInput(int* input, bool freeBoardChoice){
     bool isValid;
     //Logic here to validate input
-
+    
     return isValid;
 }
 
