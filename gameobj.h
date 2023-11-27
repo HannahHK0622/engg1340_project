@@ -22,12 +22,78 @@ public:
 
     void setWinner(int* board){
         //sets the winner
+        if((board[0]==board[1]) && (board[0]==board[2])){
+            if(board[0]==0){
+                this->winner = 0;
+            }
+            else{
+                this->winner = 1;
+            }
+        }
+        else if((board[3]==board[4]) && (board[3]==board[5])){
+            if(board[3]==0){
+                this->winner = 0;
+            }
+            else{
+                this->winner = 1;
+            }
+        }
+        else if((board[6]==board[7]) && (board[6]==board[8])){
+            if(board[6]==0){
+                this->winner = 0;
+            }
+            else{
+                this->winner = 1;
+            }
+        }
+        else if((board[0]==board[3]) && (board[0]==board[6])){
+            if(board[0]==0){
+                this->winner = 0;
+            }
+            else{
+                this->winner = 1;
+            }
+        }
+        else if((board[1]==board[4]) && (board[1]==board[7])){
+            if(board[1]==0){
+                this->winner = 0;
+            }
+            else{
+                this->winner = 1;
+            }
+        }
+        else if((board[2]==board[5]) && (board[2]==board[8])){
+            if(board[2]==0){
+                this->winner = 0;
+            }
+            else{
+                this->winner = 1;
+            }
+        }
+        else if((board[0]==board[4]) && (board[0]==board[8])){
+            if(board[0]==0){
+                this->winner = 0;
+            }
+            else{
+                this->winner = 1;
+            }
+        }
+        else if((board[2]==board[4]) && (board[2]==board[6])){
+            if(board[6]==0){
+                this->winner = 0;
+            }
+            else{
+                this->winner = 1;
+            }
+        }
     }
 
     void playsMove(int row, int col, int player){
         int move = convertMove(row, col, this->size);
         //Plays the row, col.
         //ConvertMove to be implemented by Hannah
+
+        (this->board)[move] = player;
     }
 
     int getWinner(){
