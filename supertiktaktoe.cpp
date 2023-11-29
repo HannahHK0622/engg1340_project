@@ -42,10 +42,10 @@ int main(){
     //Game logic begins here
     while(true){
         game.update();
-        int board = chooseBoard(lastPlay, game.getSize());
+        int board = chooseBoard(lastPlay[0], lastPlay[1], game.getSize(), game);
         freeBoardChoice = board == -1;
-        int* input = takeMove(freeBoardChoice);
-        bool inputValidity = checkInput(input, freeBoardChoice);
+        int* input = takeMove();
+        bool inputValidity = checkInput(input, game);
         if(game.getGameOver()){
             break;
         }

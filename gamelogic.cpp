@@ -67,7 +67,8 @@ bool checkInput(int* input, Game& game){
     }
     else{
         int subBoardIndex1d = input[0]*(game.getSize()) + input[1];
-        if(*(game.getSubgamesPtr())[boardIndex1d][subBoardIndex1d] == false){ //Don't know the initial value of array
+        subGame** subgamePtr = game.getSubgamesPtr();
+        if((*subgamePtr)[boardIndex1d].getBoard()[subBoardIndex1d] == -1){ //Don't know the initial value of array
             isValid = true;
         }
         else{
