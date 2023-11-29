@@ -11,6 +11,6 @@ int convertMove(int row, int col, int size);
 int chooseBoard(int lastRow, int lastCol, size_t size, GameObj::Game game);
 vector<int> getDefaultLastPlay();
 vector<int> takeMove();
-bool checkInput(int* input, Game& game);
+bool checkInput(vector<int> input, Game& game);
 
 #endif

@@ -58,7 +58,7 @@ vector<int> takeMove(){
     return returnVal;
 }
 
-bool checkInput(int* input, Game& game){
+bool checkInput(vector<int> input, Game& game){
     bool isValid;
     //Logic here to validate input
     //int convertedMove = row*size + col;

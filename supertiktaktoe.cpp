@@ -21,7 +21,7 @@ int main(){
     const bool debugging = true;
 
     //initialisation
-    int* lastPlay = getDefaultLastPlay();
+    vector<int> lastPlay = getDefaultLastPlay();
     string player1, player2;
     string players[] = {player1, player2};
     char playerToken[] = {'X', 'O'};
@@ -44,7 +44,7 @@ int main(){
         game.update();
         int board = chooseBoard(lastPlay[0], lastPlay[1], game.getSize(), game);
         freeBoardChoice = board == -1;
-        int* input = takeMove();
+        vector<int> input = takeMove();
         bool inputValidity = checkInput(input, game);
         if(game.getGameOver()){
             break;
