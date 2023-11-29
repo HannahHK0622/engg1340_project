@@ -46,23 +46,16 @@ int* getDefaultLastPlay(){
     return defaultValue;
 }
 
-int* takeMove(bool freeBoardChoice){
+int* takeMove(){
     int row, col;
-    if(freeBoardChoice){
-        int boardRow, boardCol;
-        cout << "You may choose which board to play this time." << endl;
-        cin >> boardRow >> boardCol;
-        cout << endl;
-        cout << "Input the row, then the column that you'd like to play in, separated by space." << endl;
-        cin >> row >> col;
-        int returnVal[] = {row, col, boardRow, boardCol};
-        return returnVal;
-    } else {
-        cout << "Input the row, then the column that you'd like to play in, separated by space." << endl;
-        cin >> row >> col;
-        int returnVal[] = {row, col};
-        return returnVal;
-    }
+    int boardRow, boardCol;
+    cout << "You may choose which board to play this time." << endl;
+    cin >> boardRow >> boardCol;
+    cout << endl;
+    cout << "Input the row, then the column that you'd like to play in, separated by space." << endl;
+    cin >> row >> col;
+    int returnVal[] = {row, col, boardRow, boardCol};
+    return returnVal;
 }
 
 bool checkInput(int* input, bool freeBoardChoice){
