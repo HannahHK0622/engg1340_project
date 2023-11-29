@@ -7,7 +7,7 @@ supertiktaktoe.o: supertiktaktoe.cpp gamelogic.h gameobj.h
 	g++ $(FLAGS) -c supertiktaktoe.cpp
 
 supertiktaktoe: supertiktaktoe.o gamelogic.o
-	g++ $(FLAGS) supertiktaktoe.o gamelogic.o -o supertiktaktoe
+	g++ $(FLAGS) supertiktaktoe.o gamelogic.o -o supertiktaktoe.o
 
 clean:
 	rm -f supertiktaktoe supertiktaktoe.o gamelogic.o
