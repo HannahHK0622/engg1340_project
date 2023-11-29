@@ -58,9 +58,23 @@ int* takeMove(){
     return returnVal;
 }
 
-bool checkInput(int* input, bool freeBoardChoice){
+bool checkInput(int* input, Game& game){
     bool isValid;
     //Logic here to validate input
+    //int convertedMove = row*size + col;
+    int 1d_board_index = input[2]*(game->size) + input[3];
+    if((game->playable)[1d_board_index] == false){
+        isValid = false;
+    }
+    else{
+        int 1d_sub_board_index = input[0]*(game->size) + input[1];
+        if((game->subgamesPtr)[1d_board_index][1d_sub_board_index] == nullptr){ //Don't know the initial value of array
+            isValid = true;
+        }
+        else{
+            isValid = false;
+        }
+    }
     
     return isValid;
 }
