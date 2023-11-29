@@ -25,9 +25,9 @@ int chooseBoard(int lastRow, int lastCol, size_t size, Game game){
     //Also check if it's playable
     //If the board is unplayable, return -1
     board = lastRow*size + lastCol;
-    bool is_playable = (game.getPlayable())[board];
+    bool isPlayable = (game.getPlayable())[board];
 
-    if(is_playable == true){
+    if(isPlayable == true){
         board = board;
     }
     else{
@@ -61,13 +61,13 @@ bool checkInput(int* input, Game& game){
     bool isValid;
     //Logic here to validate input
     //int convertedMove = row*size + col;
-    int board_index_1d = input[2]*(game.getSize()) + input[3];
-    if((game.getPlayable())[board_index_1d] == false){
+    int boardIndex1d = input[2]*(game.getSize()) + input[3];
+    if((game.getPlayable())[boardIndex1d] == false){
         isValid = false;
     }
     else{
-        int sub_board_index_1d = input[0]*(game.getSize()) + input[1];
-        if((bool)*(game.getSubgamesPtr())[board_index_1d][sub_board_index_1d] == false){ //Don't know the initial value of array
+        int subBoardIndex1d = input[0]*(game.getSize()) + input[1];
+        if(*(game.getSubgamesPtr())[boardIndex1d][subBoardIndex1d] == false){ //Don't know the initial value of array
             isValid = true;
         }
         else{

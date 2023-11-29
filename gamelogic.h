@@ -4,9 +4,9 @@
 #include "gameobj.h"
 
 int convertMove(int row, int col, int size);
-int chooseBoard(int* lastPlay, size_t size);
+int chooseBoard(int lastRow, int lastCol, size_t size, Game game);
 int* getDefaultLastPlay();
-int* takeMove(bool freeBoardChoice);
-bool checkInput(int* input, bool freeBoardChoice);
+int* takeMove();
+bool checkInput(int* input, Game& game);
 
 #endif
