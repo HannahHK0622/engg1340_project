@@ -7,7 +7,6 @@ using namespace std;
 using namespace GameObj;
 
 int convertMove(int row, int col, int size){
-    int convertedMove;
     //For a board of size "size", there are size^2 slots.
     //Unrelated, but maybe there's a way to express that:
     //1d coordinate = row*size + col?
@@ -62,13 +61,13 @@ bool checkInput(int* input, Game& game){
     bool isValid;
     //Logic here to validate input
     //int convertedMove = row*size + col;
-    int 1d_board_index = input[2]*(game.getSize()) + input[3];
-    if((game.getPlayable())[1d_board_index] == false){
+    int board_index_1d = input[2]*(game.getSize()) + input[3];
+    if((game.getPlayable())[board_index_1d] == false){
         isValid = false;
     }
     else{
-        int 1d_sub_board_index = input[0]*(game.getSize()) + input[1];
-        if((game.getSubgamesPtr())[1d_board_index][1d_sub_board_index] == nullptr){ //Don't know the initial value of array
+        int sub_board_index_1d = input[0]*(game.getSize()) + input[1];
+        if((bool)*(game.getSubgamesPtr())[board_index_1d][sub_board_index_1d] == false){ //Don't know the initial value of array
             isValid = true;
         }
         else{
