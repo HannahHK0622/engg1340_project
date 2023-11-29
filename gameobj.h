@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #ifndef GAMEOBJ_H
 #define GAMEOBJ_H
 
