@@ -19,6 +19,7 @@ public:
     void init(int size){
         this->size = size;
         this->board = new int[size * size];
+        std::fill_n(this->board, this->size, -1);
     }
 
     void setWinner(int* board){
