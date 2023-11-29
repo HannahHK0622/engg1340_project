@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include "gamelogic.h"
 
 
@@ -38,14 +39,14 @@ int chooseBoard(int lastRow, int lastCol, size_t size, Game game){
     return board;
 }
 
-int* getDefaultLastPlay(){
+vector<int> getDefaultLastPlay(){
     //Gets the default value
     int row=-1, col=-1; //{-1, -1} should be impossible, but it still fits int* so I guess?
-    int defaultValue[] = {row, col};
-    return defaultValue;
+    vector<int> returnVal = {row, col};
+    return returnVal;
 }
 
-int* takeMove(){
+vector<int> takeMove(){
     int row, col;
     int boardRow, boardCol;
     cout << "You may choose which board to play this time." << endl;
@@ -53,7 +54,7 @@ int* takeMove(){
     cout << endl;
     cout << "Input the row, then the column that you'd like to play in, separated by space." << endl;
     cin >> row >> col;
-    int returnVal[] = {row, col, boardRow, boardCol};
+    vector<int> returnVal = {row, col, boardRow, boardCol};
     return returnVal;
 }
 
