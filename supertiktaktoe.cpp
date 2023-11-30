@@ -21,7 +21,6 @@ int main(){
     string players[] = {player1, player2};
     char playerToken[] = {'X', 'O'};
     bool player = 0;
-    bool freeBoardChoice;
     size_t size;
     cout << "Please enter the names of player 1 and player 2 respectively." << endl;
     cin >> player1 >> player2;
@@ -36,17 +35,19 @@ int main(){
     while(true){
         game.update();
         vector<int> input = takeMove();
-        int board = chooseBoard(size, game, convertMove(input[0], input[1], size));
+        cout << "It's the turn of player: " << player << endl;
+        int board = chooseBoard(size, game, convertMove(input[2], input[3], size));
         bool inputValidity = checkInput(input, game);
         cout << "Input checked." << endl;
         if(inputValidity) game.playsMove(input[0], input[1], player, board);
         else cout << "invalid move. Forfeit 1 round." << endl;
         game.update();
         game.print();
+        player = !player;
         if(game.getGameOver()){
             break;
         }
-        player = !player;
+        //Since there are two players, then player++ mod 2 for player = 0 is 1 and for player = 1 is 0.
     }
 
     //game over block   

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <string>
 #ifndef GAMEOBJ_H
 #define GAMEOBJ_H
 
@@ -21,10 +22,6 @@ public:
         this->board = new int[size * size];
         this->playable = true;
         this->winner = -1;
-        std::cout << "Init subgame, size "<< size << endl;
-        std::cout << "Final size: " << this->size << endl;
-        std::cout << "subGame::init(int size)" << endl;
-        std::cout << "address: " << this << endl;
         std::fill_n(this->board, size * size, -1);
     }
 
@@ -97,16 +94,12 @@ public:
     }
 
     void playsMove(int row, int col, int player) {
-        int move = convertMove(row, col, size);
-        int* board = this->board;
+        int move = convertMove(row, col, this->size);
 
-        cout << "How big it is now, somehow... " <<  this->size << endl;
-        cout << "gameobj.h:103" <<endl;
         if (move >= 0 && move < this->size * this->size) {
-            board[move] = player;       
-            this->board = board;
+            this->board[move] = (int)player;
         } else {
-            cout << "Invalid move." << endl;
+            cout << "Move invalid, forfeit round." << move << endl;;
         }
 }
 
@@ -158,30 +151,20 @@ public:
 
         for (int i = 0; i < size * size; i++) {
             subgamesPtr[i] = &newSubgames[i];
-            // subgamesPtr[i]->init(size*size);
             (*subgamesPtr)[i].init(size*size);     
         }
 
-        cout << "Now to see if it's stored in the Game object" << endl;
-        for(int i = 0; i < size*size; i++){
-            cout << (*subgamesPtr)[i].getSize()<<endl;
-        }
 
         cout << "init finished" << endl;
     }
 
     void playsMove(int row, int col, int player, int board ){
-        cout << "playing move" << endl;
         subGame** subgamesptr = this->subgamesPtr;
-        for(int i = 0; i < this->size* this->size; i++){
-            cout << "Board" << i << "of" << this->size * this->size<< endl;
-            cout << "How big the subgame thinks it is..." << (*subgamesPtr)[i].getSize() << endl;
-            cout << "Address: "<< &(*subgamesPtr[i]) << endl;
-        }
         cout << "Playing board " << board << endl;
+        cout << "Playing move" << row << col << endl;
         if(board!= -1){
         (*subgamesptr)[board].playsMove(row, col, player);
-    } else cout << "invalid board, board cannot be " << board;}
+        } else cout << "invalid board, board cannot be " << board;}
     
     void setOverallWinner(){ //Very not DRY but we deal with it
         size_t size = this->size;
@@ -292,22 +275,52 @@ public:
         setOverallWinner();
           
     }
- void print() {
-    subGame** tempGamePtr = this->subgamesPtr;
-    for(int i=0; i<this->size; i++){
-        for(int j=0; j<this->size; j++){
-            //int convertedMove = row*size + col;
-            for(int k=0; k<this->size; k++){
-                int boardPosition = j*this->size + k;
-                //cout << tempPtr[i][boardPosition] << " ";
-                cout << (*tempGamePtr)[i].getBoard()[boardPosition];
+    void print() {
+        size_t size = this->size;
+        subGame** subgamesPtr = this->subgamesPtr;
+
+        for(int boardRowIDX = 0; boardRowIDX < size; boardRowIDX++) {
+            for(int itemRowIDX = 0; itemRowIDX < size; itemRowIDX++) {
+                for(int boardColIDX = 0; boardColIDX < size; boardColIDX++) {
+
+                int boardIndex = boardRowIDX*size + boardColIDX; 
+                subGame* board = subgamesPtr[boardIndex];
+                
+                int* subBoard = board->getBoard();
+                string symbol;
+
+                for(int subCol = 0; subCol < size; subCol++) {
+                    int player = subBoard[itemRowIDX*size + subCol];
+                    switch (player)
+                    {
+                    case 1:
+                        symbol = " X ";
+                        break;
+
+                    case 0:
+                        symbol = " O ";
+                        break;
+                    
+                    default:
+                        symbol = " . ";
+                        break;
+                    }
+                    cout << symbol << " ";
+                }
+                cout << " | "; 
+                }
+            cout << endl;
+        }
+        if(boardRowIDX < size-1) {
+            for(int i = 0; i < 15*size; i++) {
+            cout << "-"; 
             }
             cout << endl;
         }
-        cout << endl;
-        cout << endl;
+        }
     }
- }
+
+
     void destruct(){
         subGame** subgamesptr = this->subgamesPtr;
         size_t size = this->size;

@@ -45,16 +45,18 @@ vector<int> takeMove(){
     int row, col;
     int boardRow, boardCol;
     // cout << "You may choose which board to play this time." << endl;
+    cout << "0, 0 is the top left corner." << endl;
     cout << "Enter the row and column of the board you'd like to play in, separated by space." << endl;
     cin >> boardRow >> boardCol;
     cout << endl;
     cout << "Input the row, then the column that you'd like to play in, separated by space." << endl;
     cin >> row >> col;
-    vector<int> returnVal = {row--, col--, boardRow--, boardCol--};
+    vector<int> returnVal = {row, col, boardRow, boardCol};
     return returnVal;
 }
 
 bool checkInput(vector<int> input, Game& game) {
+    //input = {row, col, boardRow, boardCol}
     bool isValid;
     int size = game.getSize();
     int boardIndex1d = input[2] * size + input[3];
@@ -68,8 +70,6 @@ bool checkInput(vector<int> input, Game& game) {
 
         subGame* subgame = subgamePtr[boardIndex1d];
         int* subBoard = subgame->getBoard();
-        cout << "size: " << subgame->getSize() << endl;
-        cout << "gamelogic.cpp:80"<<endl;
         if (subBoard[subBoardIndex1d] == -1) {
             isValid = true;
         } else {
