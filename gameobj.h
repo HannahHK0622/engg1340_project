@@ -293,8 +293,21 @@ public:
           
     }
  void print() {
-//
-}
+    subGame** tempGamePtr = this->subgamesPtr;
+    for(int i=0; i<this->size; i++){
+        for(int j=0; j<this->size; j++){
+            //int convertedMove = row*size + col;
+            for(int k=0; k<this->size; k++){
+                int boardPosition = j*this->size + k;
+                //cout << tempPtr[i][boardPosition] << " ";
+                cout << (*tempGamePtr)[i].getBoard()[boardPosition];
+            }
+            cout << endl;
+        }
+        cout << endl;
+        cout << endl;
+    }
+ }
     void destruct(){
         subGame** subgamesptr = this->subgamesPtr;
         size_t size = this->size;
