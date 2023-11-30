@@ -91,6 +91,10 @@ public:
                 this->winner = 1;
             }
         }
+
+        if(this->winner != -1){
+            this->playable = false;
+        }
     }
 
     void playsMove(int row, int col, int player) {
