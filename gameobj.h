@@ -94,9 +94,11 @@ public:
     }
 
     void playsMove(int row, int col, int player) {
+        cout << "size: " << this->size << endl;
         int move = convertMove(row, col, this->size);
 
-        if (move >= 0 && move < this->size * this->size) {
+        if (move >= 0 && move < this->size* this->size ) {
+            cout << move << " of player " <<  player << endl;
             this->board[move] = (int)player;
         } else {
             cout << "Move invalid, forfeit round." << move << endl;;
@@ -151,7 +153,7 @@ public:
 
         for (int i = 0; i < size * size; i++) {
             subgamesPtr[i] = &newSubgames[i];
-            (*subgamesPtr)[i].init(size*size);     
+            (*subgamesPtr)[i].init(size);     
         }
 
 
@@ -161,7 +163,8 @@ public:
     void playsMove(int row, int col, int player, int board ){
         subGame** subgamesptr = this->subgamesPtr;
         cout << "Playing board " << board << endl;
-        cout << "Playing move" << row << col << endl;
+        cout << "Playing move" << row << " " << col << endl;
+        const int debugRow = 1, debugCol = 1;
         if(board!= -1){
         (*subgamesptr)[board].playsMove(row, col, player);
         } else cout << "invalid board, board cannot be " << board;}

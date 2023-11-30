@@ -34,12 +34,6 @@ int chooseBoard(size_t size, Game& game, int board){
     return board;
 }
 
-vector<int> getDefaultLastPlay(){
-    //Gets the default value
-    int row=-1, col=-1; //{-1, -1} should be impossible, but it still fits int* so I guess?
-    vector<int> returnVal = {row, col};
-    return returnVal;
-}
 
 vector<int> takeMove(){
     int row, col;
@@ -59,23 +53,34 @@ bool checkInput(vector<int> input, Game& game) {
     //input = {row, col, boardRow, boardCol}
     bool isValid;
     int size = game.getSize();
+    int subBoardIDX = input[0] * size + input[1];
     int boardIndex1d = input[2] * size + input[3];
 
-    if (game.getPlayable()[boardIndex1d] == false || boardIndex1d >= size * size) {
-        isValid = false;
-    } else {
-        int subBoardIndex1d = input[0] * size + input[1];
-        subGame** subgamePtr = game.getSubgamesPtr();
-        cout << "Checking if the selected space is playable..." << endl;
+    //A valid input...
+    if(
+    //Points to a board that exists and is playable, and
+    (0 <= boardIndex1d < size*size && game.getPlayable()[boardIndex1d] == true &&
+    //Points to a space that exists and is open
+     0 <= subBoardIDX < size*size && (game.getSubgamesPtr())[boardIndex1d]->getBoard()[subBoardIDX] == -1
+    )) // then it must be valid. 
+    isValid = true;
 
-        subGame* subgame = subgamePtr[boardIndex1d];
-        int* subBoard = subgame->getBoard();
-        if (subBoard[subBoardIndex1d] == -1) {
-            isValid = true;
-        } else {
-            isValid = false;
-        }
-    }
+    else isValid = false;
+    // if (game.getPlayable()[boardIndex1d] == false || boardIndex1d >= size * size) {
+    //     isValid = false;
+    // } else {
+    //     int subBoardIndex1d = input[0] * size + input[1];
+    //     subGame** subgamePtr = game.getSubgamesPtr();
+    //     cout << "Checking if the selected space is playable..." << endl;
+
+    //     subGame* subgame = subgamePtr[boardIndex1d];
+    //     int* subBoard = subgame->getBoard();
+    //     if (subBoard[subBoardIndex1d] == -1) {
+    //         isValid = true;
+    //     } else {
+    //         isValid = false;
+    //     }
+    // }
 
     return isValid;
 }

@@ -6,7 +6,7 @@
 using namespace std;
 using namespace GameObj;
 
-void declareWinner(string winner){
+void declareWinner(bool winner){
     cout << "The player is " << winner << endl;
 }
 
@@ -16,16 +16,10 @@ int main(){
     const bool debugging = false;
 
     //initialisation
-    vector<int> lastPlay = getDefaultLastPlay();
-    string player1, player2;
-    string players[] = {player1, player2};
     char playerToken[] = {'X', 'O'};
     bool player = 0;
     size_t size;
-    cout << "Please enter the names of player 1 and player 2 respectively." << endl;
-    cin >> player1 >> player2;
-    cout << "Give one number; This number represents the size of the subGame (for a 3x3 game, enter \"3\")" << endl;
-    cin >> size;
+    size = 3;
     Game game;
     game.init(size);
 
@@ -35,9 +29,15 @@ int main(){
     while(true){
         game.update();
         vector<int> input = takeMove();
+        //input: {row, col, boardrow, boardcol}
         cout << "It's the turn of player: " << player << endl;
-        int board = chooseBoard(size, game, convertMove(input[2], input[3], size));
+        int board = chooseBoard(
+        size,
+        game,
+        convertMove(input[2], input[3], size));
+
         bool inputValidity = checkInput(input, game);
+
         cout << "Input checked." << endl;
         if(inputValidity) game.playsMove(input[0], input[1], player, board);
         else cout << "invalid move. Forfeit 1 round." << endl;
@@ -51,7 +51,7 @@ int main(){
     }
 
     //game over block   
-    declareWinner(players[game.getWinner()]);
+    declareWinner(player);
     game.destruct();
     return 0;
 }
