@@ -35,11 +35,11 @@ int main(){
     //Game logic begins here
     while(true){
         game.update();
-        int board = chooseBoard(lastPlay[0], lastPlay[1], game.getSize(), game);
         vector<int> input = takeMove();
+        int board = chooseBoard(size, game, convertMove(input[0], input[1], size));
         bool inputValidity = checkInput(input, game);
         cout << "Input checked." << endl;
-        if(inputValidity) game.playsMove(input[1], input[2], player, board);
+        if(inputValidity) game.playsMove(input[0], input[1], player, board);
         else cout << "invalid move. Forfeit 1 round." << endl;
         game.update();
         game.print();

@@ -21,7 +21,10 @@ public:
         this->board = new int[size * size];
         this->playable = true;
         this->winner = -1;
-        std::cout << "Init subgame" << endl;
+        std::cout << "Init subgame, size "<< size << endl;
+        std::cout << "Final size: " << this->size << endl;
+        std::cout << "subGame::init(int size)" << endl;
+        std::cout << "address: " << this << endl;
         std::fill_n(this->board, size * size, -1);
     }
 
@@ -93,17 +96,19 @@ public:
         }
     }
 
-    void playsMove(int row, int col, int player){
-    int move = convertMove(row, col, this->size);
-    int* board = this->board;
+    void playsMove(int row, int col, int player) {
+        int move = convertMove(row, col, size);
+        int* board = this->board;
 
-    if (/*this->board != nullptr && */move >= 0 && move < this->size * this->size) {
-        board[move] = player;
-        this->board = board;
-    } else {
-        cout << "This is where it'd segfault." << endl;
-    }
-    }
+        cout << "How big it is now, somehow... " <<  this->size << endl;
+        cout << "gameobj.h:103" <<endl;
+        if (move >= 0 && move < this->size * this->size) {
+            board[move] = player;       
+            this->board = board;
+        } else {
+            cout << "Invalid move." << endl;
+        }
+}
 
     int getWinner(){
         return this->winner;
@@ -153,17 +158,30 @@ public:
 
         for (int i = 0; i < size * size; i++) {
             subgamesPtr[i] = &newSubgames[i];
-            subgamesPtr[i]->init(size);
+            // subgamesPtr[i]->init(size*size);
+            (*subgamesPtr)[i].init(size*size);     
+        }
+
+        cout << "Now to see if it's stored in the Game object" << endl;
+        for(int i = 0; i < size*size; i++){
+            cout << (*subgamesPtr)[i].getSize()<<endl;
         }
 
         cout << "init finished" << endl;
     }
 
-    void playsMove(int row, int col, int player, int board){
+    void playsMove(int row, int col, int player, int board ){
         cout << "playing move" << endl;
         subGame** subgamesptr = this->subgamesPtr;
+        for(int i = 0; i < this->size* this->size; i++){
+            cout << "Board" << i << "of" << this->size * this->size<< endl;
+            cout << "How big the subgame thinks it is..." << (*subgamesPtr)[i].getSize() << endl;
+            cout << "Address: "<< &(*subgamesPtr[i]) << endl;
+        }
+        cout << "Playing board " << board << endl;
+        if(board!= -1){
         (*subgamesptr)[board].playsMove(row, col, player);
-    }
+    } else cout << "invalid board, board cannot be " << board;}
     
     void setOverallWinner(){ //Very not DRY but we deal with it
         size_t size = this->size;
@@ -274,9 +292,9 @@ public:
         setOverallWinner();
           
     }
-    void print() {}
-
-
+ void print() {
+//
+}
     void destruct(){
         subGame** subgamesptr = this->subgamesPtr;
         size_t size = this->size;

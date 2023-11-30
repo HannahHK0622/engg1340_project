@@ -19,18 +19,11 @@ int convertMove(int row, int col, int size){
     }
 
 
-int chooseBoard(int lastRow, int lastCol, size_t size, Game game){
-    int board;
-    //a bunch of logic
-    //accoring to lastRow, lastCol, choose a board
-    //Also check if it's playable
-    //If the board is unplayable, return -1
-    board = lastRow*size + lastCol;
+int chooseBoard(size_t size, Game& game, int board){
+
     bool isPlayable = (game.getPlayable())[board];
 
-    if(isPlayable == true
-        || lastRow < size
-        || lastCol < size){
+    if(isPlayable == true){
         board = board;
     }
     else{
@@ -75,8 +68,8 @@ bool checkInput(vector<int> input, Game& game) {
 
         subGame* subgame = subgamePtr[boardIndex1d];
         int* subBoard = subgame->getBoard();
-        cout << "obtained board contents of subgame " << boardIndex1d << endl;
-        for(int i = 0; i < size*size; i++) cout << subBoard[i] << endl;
+        cout << "size: " << subgame->getSize() << endl;
+        cout << "gamelogic.cpp:80"<<endl;
         if (subBoard[subBoardIndex1d] == -1) {
             isValid = true;
         } else {
