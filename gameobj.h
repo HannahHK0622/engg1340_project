@@ -25,77 +25,106 @@ public:
         std::fill_n(this->board, size * size, -1);
     }
 
-    void setWinner(int* board){
-        //sets the winner
-        if((board[0]==board[1]) && (board[0]==board[2])){
-            if(board[0]==0){
-                this->winner = 0;
-            }
-            else{
-                this->winner = 1;
-            }
+     void checkWinCondition(int playerOneCount, int playerTwoCount){
+        if (playerOneCount == size && playerTwoCount == 0)
+        {
+            this->winner = 1;
+            this->playable = false;
         }
-        else if((board[3]==board[4]) && (board[3]==board[5])){
-            if(board[3]==0){
-                this->winner = 0;
-            }
-            else{
-                this->winner = 1;
-            }
-        }
-        else if((board[6]==board[7]) && (board[6]==board[8])){
-            if(board[6]==0){
-                this->winner = 0;
-            }
-            else{
-                this->winner = 1;
-            }
-        }
-        else if((board[0]==board[3]) && (board[0]==board[6])){
-            if(board[0]==0){
-                this->winner = 0;
-            }
-            else{
-                this->winner = 1;
-            }
-        }
-        else if((board[1]==board[4]) && (board[1]==board[7])){
-            if(board[1]==0){
-                this->winner = 0;
-            }
-            else{
-                this->winner = 1;
-            }
-        }
-        else if((board[2]==board[5]) && (board[2]==board[8])){
-            if(board[2]==0){
-                this->winner = 0;
-            }
-            else{
-                this->winner = 1;
-            }
-        }
-        else if((board[0]==board[4]) && (board[0]==board[8])){
-            if(board[0]==0){
-                this->winner = 0;
-            }
-            else{
-                this->winner = 1;
-            }
-        }
-        else if((board[2]==board[4]) && (board[2]==board[6])){
-            if(board[6]==0){
-                this->winner = 0;
-            }
-            else{
-                this->winner = 1;
-            }
-        }
-
-        if(this->winner != -1){
+        else if (playerTwoCount == size && playerOneCount == 0)
+        {
+            this->winner = 0;
             this->playable = false;
         }
     }
+
+    void setWinner(){
+        board = this->board;
+        //Entire col
+        
+        for(int row = 0; row < size; row++){
+            int playerOneCount = 0, playerTwoCount = 0;
+            for(int col = 0; col < size; col++ ){
+                int occupant = board[row*size+col];
+                switch (occupant){
+                    case -1:
+                        break;
+                    
+                    case 0:
+                        playerOneCount++;
+                        break;
+
+                    case 1:
+                        playerTwoCount++;
+                        break;
+                }
+
+                checkWinCondition(playerOneCount, playerTwoCount);
+            }
+        }
+
+        for(int row = 0; row < size; row++){
+            int playerOneCount = 0, playerTwoCount = 0;
+            for(int col = 0; col < size; col++ ){
+                int occupant = board[col*size+row];
+                switch (occupant){
+                    case -1:
+                        break;
+                    
+                    case 0:
+                        playerOneCount++;
+                        break;
+
+                    case 1:
+                        playerTwoCount++;
+                        break;
+                }
+
+                checkWinCondition(playerOneCount, playerTwoCount);
+            }
+        }
+
+        for(int idx = 0; idx < size*size; idx += size+1){
+            int playerOneCount = 0, playerTwoCount = 0;
+            int occupant = board[idx];
+            switch (occupant){
+                    case -1:
+                        break;
+                    
+                    case 0:
+                        playerOneCount++;
+                        break;
+
+                    case 1:
+                        playerTwoCount++;
+                        break;
+                }
+
+                checkWinCondition(playerOneCount, playerTwoCount);
+        }
+
+        for(int idx = size-1; idx < size*size; idx += size-1){
+            int playerOneCount = 0, playerTwoCount = 0;
+            int occupant = board[idx];
+            switch (occupant){
+                    case -1:
+                        break;
+                    
+                    case 0:
+                        playerOneCount++;
+                        break;
+
+                    case 1:
+                        playerTwoCount++;
+                        break;
+                }
+
+                checkWinCondition(playerOneCount, playerTwoCount);
+        }
+        
+        }
+    
+    
 
     void playsMove(int row, int col, int player) {
         cout << "size: " << this->size << endl;
@@ -238,7 +267,7 @@ public:
         //     ^     ^     ^
         //idx += size-1 && idx starts at size
 
-        for(int idx = size; idx < size*size; idx += size-1){
+        for(int idx = size-1; idx < size*size; idx += size-1){
             int playerOneWinCount = 0, playerTwoWinCount = 0; 
             int blockWinner = subWinners[idx];
             if(blockWinner == -1) break; //no winner

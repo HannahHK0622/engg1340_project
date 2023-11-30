@@ -56,6 +56,7 @@ bool checkInput(vector<int> input, Game& game) {
     int subBoardIDX = input[0] * size + input[1];
     int boardIndex1d = input[2] * size + input[3];
 
+    cout << size << endl;
     //A valid input...
     if(
     //Points to a board that exists and is playable, and
