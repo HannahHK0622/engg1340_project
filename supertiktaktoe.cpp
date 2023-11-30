@@ -10,15 +10,10 @@ void declareWinner(string winner){
     cout << "The player is " << winner << endl;
 }
 
-void debug(Game game){
-    cout << "debug active" << endl;
-    //Debug stuff goes here and please PLEASE delete before deadline
-    game.rawDump();
-}
 
 int main(){
     //Set false for submission
-    const bool debugging = true;
+    const bool debugging = false;
 
     //initialisation
     vector<int> lastPlay = getDefaultLastPlay();
@@ -28,27 +23,30 @@ int main(){
     bool player = 0;
     bool freeBoardChoice;
     size_t size;
+    cout << "Please enter the names of player 1 and player 2 respectively." << endl;
     cin >> player1 >> player2;
-    cout << "Please enter the size of the game and the subgame. Note that the game and subgame must be of the same size." << endl;
+    cout << "Give one number; This number represents the size of the subGame (for a 3x3 game, enter \"3\")" << endl;
     cin >> size;
     Game game;
     game.init(size);
 
-    if(debugging){
-        debug(game);
-    }
-    
+    //Debug removed from here...
 
     //Game logic begins here
     while(true){
         game.update();
         int board = chooseBoard(lastPlay[0], lastPlay[1], game.getSize(), game);
-        freeBoardChoice = board == -1;
         vector<int> input = takeMove();
         bool inputValidity = checkInput(input, game);
+        cout << "Input checked." << endl;
+        if(inputValidity) game.playsMove(input[1], input[2], player, board);
+        else cout << "invalid move. Forfeit 1 round." << endl;
+        game.update();
+        game.print();
         if(game.getGameOver()){
             break;
         }
+        player = !player;
     }
 
     //game over block   

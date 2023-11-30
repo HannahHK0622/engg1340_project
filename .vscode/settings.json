@@ -4,6 +4,10 @@
         "string": "cpp",
         "iostream": "cpp",
         "xstring": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "algorithm": "cpp",
+        "charconv": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp"
     }
 }

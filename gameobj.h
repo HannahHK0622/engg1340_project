@@ -16,10 +16,13 @@ private:
     bool playable;
 
 public:
-    void init(int size){
+    void init(int size) {
         this->size = size;
         this->board = new int[size * size];
-        std::fill_n(this->board, this->size, -1);
+        this->playable = true;
+        this->winner = -1;
+        std::cout << "Init subgame" << endl;
+        std::fill_n(this->board, size * size, -1);
     }
 
     void setWinner(int* board){
@@ -91,11 +94,15 @@ public:
     }
 
     void playsMove(int row, int col, int player){
-        int move = convertMove(row, col, this->size);
-        //Plays the row, col.
-        //ConvertMove to be implemented by Hannah
+    int move = convertMove(row, col, this->size);
+    int* board = this->board;
 
-        (this->board)[move] = player;
+    if (/*this->board != nullptr && */move >= 0 && move < this->size * this->size) {
+        board[move] = player;
+        this->board = board;
+    } else {
+        cout << "This is where it'd segfault." << endl;
+    }
     }
 
     int getWinner(){
@@ -125,34 +132,44 @@ class Game{
 
 private: 
     size_t size;
-    subGame** subgamesPtr;
+    subGame** subgamesPtr; // pointer to array
     bool* playable;
     int* subWinners;
     bool gameOver;
     int winner;
 
 public: 
-    void init(int size){
+    void init(int size) {
         this->size = size;
         subGame* newSubgames = new subGame[size * size];
-        this->playable = new bool[size*size];
-        this->subgamesPtr = &newSubgames;
+        this->playable = new bool[size * size];
+        this->subWinners = new int[size * size];
+        this->subgamesPtr = new subGame*[size * size];
         this->winner = -1;
-        for(int i = 0; i < size*size; i++){
-            (*subgamesPtr)[i].init(size);
+        this->gameOver = false;
+
+        std::fill_n(this->playable, size * size, true);
+        std::fill_n(this->subWinners, size * size, -1);
+
+        for (int i = 0; i < size * size; i++) {
+            subgamesPtr[i] = &newSubgames[i];
+            subgamesPtr[i]->init(size);
         }
+
+        cout << "init finished" << endl;
     }
 
     void playsMove(int row, int col, int player, int board){
+        cout << "playing move" << endl;
         subGame** subgamesptr = this->subgamesPtr;
         (*subgamesptr)[board].playsMove(row, col, player);
     }
     
-    void setOverallWinner(){
-        subGame** subgamesPtr = this->subgamesPtr;
+    void setOverallWinner(){ //Very not DRY but we deal with it
         size_t size = this->size;
         int* subWinners = this->subWinners;
         int winner = this->winner;
+        
         /*
         Win conditions:
         - Someone wins an entire row (subgames[const][var] is all equal for some const and all var < size)
@@ -160,6 +177,69 @@ public:
         - Someone wins diagonal
         */
 
+        //Entire col
+        // [][][] [][][] [][][]
+        //  ^      ^      ^
+        // idx += size
+
+        for(int col = 0; col < size; col++){
+        int playerOneWinCount = 0, playerTwoWinCount = 0; 
+            for(int row = 0; row < size; row++){
+                int blockWinner = subWinners[row*size+col];
+                if(blockWinner == -1) break; //no winner
+                if(blockWinner == 0) playerOneWinCount++;
+                if(blockWinner == 1) playerTwoWinCount++;
+                int winner = playerOneWinCount == size? 0: 1;
+                this->gameOver = true;
+            }
+       }
+
+        //Entire row
+        // [][][] [][][] [][][]
+        //  ^ ^ ^
+        // idx++
+        for(int col = 0; col < size; col++){
+            int playerOneWinCount = 0, playerTwoWinCount = 0; 
+            for(int row = 0; row < size; row++){
+                int blockWinner = subWinners[col*size + row];
+                if(blockWinner == -1) break; //no winner
+                if(blockWinner == 0) playerOneWinCount++; 
+                if(blockWinner == 1) playerTwoWinCount++;
+                int winner = playerOneWinCount == size? 0:1;
+                this->gameOver = true;
+            }
+        }
+
+        //Diagonal
+        //[][][] [][][] [][][]
+        // ^        ^        ^
+        //idx += size+1 && idx starts at 0
+        for(int idx = 0; idx < size*size; idx += size+1){  
+            int playerOneWinCount = 0, playerTwoWinCount = 0; 
+            int blockWinner = subWinners[idx];
+            if(blockWinner == -1) break; //no winner
+            if(blockWinner == 0) playerOneWinCount++; 
+            if(blockWinner == 1) playerTwoWinCount++;
+            int winner = playerOneWinCount == size? 0:1;
+            this->gameOver = true;
+
+        }
+
+        //Diagonal, vol. 2
+        //[][][]  [][][]  [][][]
+        //     ^     ^     ^
+        //idx += size-1 && idx starts at size
+
+        for(int idx = size; idx < size*size; idx += size-1){
+            int playerOneWinCount = 0, playerTwoWinCount = 0; 
+            int blockWinner = subWinners[idx];
+            if(blockWinner == -1) break; //no winner
+            if(blockWinner == 0) playerOneWinCount++; 
+            if(blockWinner == 1) playerTwoWinCount++;
+            int winner = playerOneWinCount == size? 0:1;
+            this->gameOver = false;
+        }
+        
 
     }
 
@@ -171,34 +251,6 @@ public:
         return this->size;
     }
 
-    void rawDump(){
-        cout << "You are using a debug feature... Just so you know" << endl;
-        subGame** subgamesptr = this->subgamesPtr;
-        size_t size = this->size;
-        for(int board = 0; board < size; board++){
-            for(int elem = 0; elem < size; elem++){
-                cout << (*subgamesptr)[board].getBoard()[elem];
-            }
-            cout << endl;
-        }
-        cout << endl;
-    }
-
-    void formattedOutput(){
-        subGame** subgamesptr = this->subgamesPtr;
-        size_t size = this->size;
-    }
-
-    void destruct(){
-        subGame** subgamesptr = this->subgamesPtr;
-        size_t size = this->size;
-        for(int board = 0; board < size; board++){
-            (*subgamesptr)[board].destruct();
-        }
-        delete[] subgamesPtr;
-        delete[] playable;
-        delete[] subWinners;
-    }
 
     bool getGameOver(){
         return this->gameOver;
@@ -215,12 +267,27 @@ public:
     void update(){
         subGame** subgamesptr = this->subgamesPtr;
         size_t size = this->size;
-        for(int board = 0; board < size*size; board++){
+        for(int board = 0; board < size*size; board++){ 
             this->playable[board] = (*subgamesptr)[board].getPlayable();
             this->subWinners[board] = (*subgamesptr)[board].getWinner();
         }
-        this->setOverallWinner(); 
+        setOverallWinner();
+          
     }
+    void print() {}
+
+
+    void destruct(){
+        subGame** subgamesptr = this->subgamesPtr;
+        size_t size = this->size;
+        for(int board = 0; board < size; board++){
+            (*subgamesptr)[board].destruct();
+        }
+        delete[] subgamesPtr;
+        delete[] playable;
+        delete[] subWinners;
+    }
+
     //Hannah's work
 };
 }
